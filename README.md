@@ -165,6 +165,12 @@ any appender pattern that references `%X{requestId}` / `%X{correlationId}`.
 ./gradlew bootRun
 ```
 
+## Running with Postgresql DB (docker compose)
+
+```bash
+docker-compose up -d
+```
+
 ```bash
 # Basic call - server generates both IDs
 curl http://localhost:8080/log
