@@ -1,4 +1,15 @@
-# lab-02-cpo — API Reference
+# lab-02-cpo
+## Running on docker reference
+
+Starts the backend with the H2 web console enabled so you can inspect persisted log entries at `http://localhost:8080/h2-console` (JDBC URL: `jdbc:h2:mem:demo`).
+
+```bash
+docker run -p 8080:8080 \
+   -e SPRING_H2_CONSOLE_SETTINGS_WEB_ALLOW_OTHERS=true \
+    ghcr.io/polito-cpo-2026/lab-02-backend:0.0.1                                                                                                                    
+```
+
+# API Reference
 
 ## Overview
 
@@ -82,8 +93,8 @@ Client session / test sequence
 └── Request 3 ──► X-Request-Id: <uuid-C>   X-Correlation-Id: <uuid-session>
 ```
 
-- **Request ID** — changes on every call; identifies one HTTP round-trip in logs.
-- **Correlation ID** — stays constant for a group (e.g. one automated test run, one user
+- **Request ID** - changes on every call; identifies one HTTP round-trip in logs.
+- **Correlation ID** - stays constant for a group (e.g. one automated test run, one user
   session). Lets you filter logs for all requests belonging to the same workflow.
 
 When clients do not send the headers the backend auto-generates both, so each request gets
@@ -130,7 +141,7 @@ env:
 | `request_id` | VARCHAR | Request-scoped identifier |
 | `correlation_id` | VARCHAR | Correlation identifier |
 
-Schema is managed by Hibernate (`spring.jpa.hibernate.ddl-auto=create-drop` in dev).
+Schema is managed by Hibernate (`spring.jpa.hibernate.ddl-auto=update` in dev).
 Switch to `validate` or use Flyway/Liquibase for production.
 
 ---
@@ -155,7 +166,7 @@ any appender pattern that references `%X{requestId}` / `%X{correlationId}`.
 ```
 
 ```bash
-# Basic call — server generates both IDs
+# Basic call - server generates both IDs
 curl http://localhost:8080/log
 
 # Provide a correlation ID to link multiple calls
@@ -178,7 +189,7 @@ src/main/kotlin/it/tonicminds/lab02cpo/
 ├── AppConfig.kt                @ConfigurationProperties(prefix = "app")
 ├── LogEntry.kt                 JPA entity → log_entries table
 ├── LogRepository.kt            Spring Data JPA repository
-├── TraceFilter.kt     Servlet filter — ID resolution + MDC + request logging
+├── TraceFilter.kt     Servlet filter - ID resolution + MDC + request logging
 ├── LogService.kt               Service interface
 ├── LogServiceImpl.kt           Service implementation
 ├── LogController.kt            REST controller + LogResponse DTO
@@ -186,7 +197,7 @@ src/main/kotlin/it/tonicminds/lab02cpo/
 
 src/test/kotlin/it/tonicminds/lab02cpo/
 ├── Lab02CpoApplicationTests.kt Context smoke test
-├── LogServiceTest.kt           Unit tests — LogServiceImpl (Mockito, no Spring context)
-├── LogControllerTest.kt        Web-layer slice tests — @WebMvcTest + @MockitoBean
-└── TraceFilterTest.kt Unit tests — filter ID resolution logic
+├── LogServiceTest.kt           Unit tests - LogServiceImpl (Mockito, no Spring context)
+├── LogControllerTest.kt        Web-layer slice tests - @WebMvcTest + @MockitoBean
+└── TraceFilterTest.kt Unit tests - filter ID resolution logic
 ```
