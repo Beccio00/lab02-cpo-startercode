@@ -23,12 +23,21 @@ spec:
             - name: APP_VERSION
               value: {{ .Values.app.version | quote }}
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:h2:mem:demo"
+              value: "jdbc:postgresql://my-simple-app-postgresql:5432/postgres"
             - name: POD_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-                  
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Release.Name }}-postgresql"
+                  key: postgres-password
+            - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+              value: org.postgresql.Driver                  
+
           startupProbe:
             httpGet:
               path: /actuator/health/liveness
