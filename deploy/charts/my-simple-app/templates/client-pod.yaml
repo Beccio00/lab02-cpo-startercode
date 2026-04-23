@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: curlbox
+  namespace: lab02-app
+spec:
+  restartPolicy: Never
+  containers:
+    - name: curlbox
+      image: curlimages/curl:8.19.0
+      command: ["sleep", "infinity"]

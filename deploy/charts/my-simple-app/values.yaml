@@ -1,0 +1,13 @@
+image:
+  repository: ghcr.io/polito-cpo-2026/lab-02-backend
+  tag: "0.0.1"
+  pullPolicy: IfNotPresent
+
+app:
+  port: 8080
+  version: "0.0.1"
+
+replicaCount: 1
+
+
+imagePullSecrets: []
